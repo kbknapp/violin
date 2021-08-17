@@ -1,9 +1,30 @@
 [package]
 name = "violin"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2018"
+include = [
+	"src/**/*",
+	"Cargo.toml",
+	"README.md"
+]
+description = "decentralized network coordinate system using the vivaldi algorithm"
+repository = "https://github.com/kbknapp/violin"
+documentation = "https://docs.rs/violin/"
+keywords = [
+	"vivaldi",
+	"network",
+	"coordinate",
+	"latency",
+	"distance"
+]
+categories = [
+	"algorithms", 
+	"network-programming",
+	"no-std"
+]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 rand = "0.8.4"
