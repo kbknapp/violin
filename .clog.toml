@@ -1,0 +1,6 @@
+[clog]
+repository = "https://github.com/kbknapp/violin"
+subtitle = "Violin Release"
+
+[sections]
+Documentation = ["docs", "doc"]
