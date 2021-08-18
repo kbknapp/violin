@@ -12,6 +12,7 @@ mod point;
 
 pub use point::Point;
 
+#[derive(Debug, Clone)]
 pub struct State<const N: usize> {
     Point: Point<N>,
     err_est: f64,

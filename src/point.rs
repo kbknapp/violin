@@ -5,7 +5,7 @@ use rand::{
     thread_rng,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Point<const N: usize> {
     uvec: [f64; N],
     height: u8,
