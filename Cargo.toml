@@ -2,14 +2,21 @@
 name = "violin"
 version = "0.0.1"
 edition = "2018"
+description = "decentralized network coordinate system using the vivaldi algorithm"
+documentation = "https://docs.rs/violin/"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/kbknapp/violin"
+categories = [
+	"algorithms",
+	"network-programming",
+	"no-std"
+]
 include = [
 	"src/**/*",
 	"Cargo.toml",
 	"README.md"
 ]
-description = "decentralized network coordinate system using the vivaldi algorithm"
-repository = "https://github.com/kbknapp/violin"
-documentation = "https://docs.rs/violin/"
 keywords = [
 	"vivaldi",
 	"network",
@@ -17,13 +24,6 @@ keywords = [
 	"latency",
 	"distance"
 ]
-categories = [
-	"algorithms", 
-	"network-programming",
-	"no-std"
-]
-license = "MIT OR Apache-2.0"
-readme = "README.md"
 
 [[bench]]
 name = "benches"
