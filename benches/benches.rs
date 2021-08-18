@@ -7,7 +7,7 @@ use rand::{
     thread_rng,
 };
 
-use violin::State;
+use violin::{Point, State};
 
 const SAMPLES: u64 = 100;
 const NODES: u64 = 10_000;

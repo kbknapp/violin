@@ -30,14 +30,14 @@ name = "benches"
 harness = false
 
 [dependencies]
-rand = "0.8.4"
+rand = { version = "0.8.4", default-features = false }
 
 [dev-dependencies]
 criterion = "0.3.5"
 rand = "0.8.4"
 
 [features]
-default = []
+default = ["std"]
 nightly = [] # Enable nighlty or experiemental features
 doc     = [] # Used when compiling docs
 std     = ["rand/std"] # Enable stdlib support
