@@ -25,8 +25,15 @@ categories = [
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 
+[[bench]]
+name = "benches"
+harness = false
 
 [dependencies]
+rand = "0.8.4"
+
+[dev-dependencies]
+criterion = "0.3.5"
 rand = "0.8.4"
 
 [features]
