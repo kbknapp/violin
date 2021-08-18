@@ -83,7 +83,7 @@ impl<const N: usize> State<N> {
         self.pos.direction(p2)
     }
 
-    pub fn distance(&self, p2: &Point<N>) -> Point<N> {
+    pub fn distance(&self, p2: &Point<N>) -> f64 {
         self.pos.distance(p2)
     }
 }
