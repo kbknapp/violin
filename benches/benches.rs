@@ -9,7 +9,7 @@ use rand::{
 
 use violin::State;
 
-const SAMPLES: u64 = 1_000;
+const SAMPLES: u64 = 100;
 const NODES: u64 = 10_000;
 
 pub fn baseline(buf: &[u8]) -> usize {
@@ -40,15 +40,23 @@ pub fn benchmarks(c: &mut Criterion) {
             .collect();
         // Pre-move the peers at least once so they're not all clustered around the origin
         for (i, n) in rtts.iter().enumerate() {
-            let peer = peers.get_mut(i % NODES as usize).unwrap();
-            let node = nodes.get(i + 1).unwrap();
-            peer.update(*n, node.point().clone(), errs[i]);
+            if let Some(peer) = peers.get_mut(i % NODES as usize) {
+                if let Some(node) = nodes.get(i + 1) {
+                    peer.update(*n, node.point().clone(), errs[i]);
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
         }
         b.iter(|| {
-            for (i, n) in rtts.iter().enumerate() {
-                let node = nodes.get_mut(i % NODES as usize).unwrap();
-                let peer = peers.get(i + 1).unwrap();
-                node.update(*n, peer.point().clone(), errs[i]);
+            let mut i: usize = 0;
+            while i < SAMPLES as usize {
+                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
+                    n.update(rtts[i + j], p.point().clone(), errs[i + j]);
+                }
+                i += 1;
             }
         })
     });
