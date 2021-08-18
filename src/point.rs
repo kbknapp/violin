@@ -29,6 +29,14 @@ impl<const N: usize> Point<N> {
         c.height = h;
         c
     }
+
+    pub(crate) fn direction(&self, p2: &Point<N>) -> Point<N> {
+        todo!("impl Point::direction")
+    }
+
+    pub fn distance(&self, p2: &Point<N>) -> Point<N> {
+        todo!("impl Point::distance")
+    }
 }
 
 impl<const N: usize> Mul<f64> for Point<N> {
