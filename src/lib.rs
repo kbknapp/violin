@@ -32,9 +32,26 @@ impl<const N: usize> State<N> {
         }
     }
 
-    pub fn update(&mut self, rtt: f64, r_c: Point<N>, r_e: f64) {
-        // Sample weight balances local and remote error
-        let err_weight = self.err_est / (self.err_est + r_e);
+    pub fn error_estimate(&mut self, ee: f64) {
+        self.error_estimate = ee;
+    }
+
+    pub fn point(&self) -> &Point<N> {
+        &self.pos
+    }
+
+    pub fn resistance(&mut self, r: f64) {
+        self.resistance = r;
+    }
+
+    pub fn error_sensitivity(&mut self, es: f64) {
+        self.error_sensitivity = es;
+    }
+
+    pub fn position_sensitivity(&mut self, ps: f64) {
+        self.pos_sensitivity = ps;
+    }
+
     pub fn update(&mut self, rtt: f64, remote: Point<N>, remote_err: f64) {
         // @TODO assert or Err()?
         assert!(rtt >= 0.0);
@@ -62,10 +79,11 @@ impl<const N: usize> State<N> {
         self.pos += scaled_dir * self.resistance;
     }
 
-fn dist<const N: usize>(p1: &Point<N>, p2: &Point<N>) -> f64 {
-    todo!("impl dist()")
-}
+    fn direction(&self, p2: &Point<N>) -> Point<N> {
+        self.pos.direction(p2)
+    }
 
-fn dir<const N: usize>(p1: &Point<N>, p2: &Point<N>) -> Point<N> {
-    todo!("impl dir()")
+    pub fn distance(&self, p2: &Point<N>) -> Point<N> {
+        self.pos.distance(p2)
+    }
 }
