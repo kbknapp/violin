@@ -40,5 +40,6 @@ rand = "0.8.4"
 default = ["std"]
 nightly = [] # Enable nighlty or experiemental features
 doc     = [] # Used when compiling docs
+builder = [] # Enable the "Builder Pattern" for Node
 std     = ["rand/std"] # Enable stdlib support
 alloc   = ["rand/alloc"] # Enable heap allocations

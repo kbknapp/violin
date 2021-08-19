@@ -16,6 +16,8 @@ use core::{
     ops::{Add, AddAssign, Mul},
 };
 
+use rand::distributions::{Distribution, Uniform};
+
 use crate::Coordinate;
 
 #[derive(Clone, Debug)]
@@ -36,6 +38,16 @@ impl<const N: usize> BoxVecN<N> {
 }
 
 impl<const N: usize> Coordinate for BoxVecN<N> {
+    fn initialize() -> Self {
+        let mut rng = rand::thread_rng();
+        let die = Uniform::from(-1.0..1.0);
+        let mut arr = [0f64; N];
+        for n in arr.iter_mut() {
+            *n = die.sample(&mut rng);
+        }
+        Self(Box::new(arr))
+    }
+
     fn distance(&self, other: &Self) -> f64 {
         // @TODO @perf simd
         let mut term = 0.0;
@@ -55,10 +67,6 @@ impl<const N: usize> Coordinate for BoxVecN<N> {
             *n = s - r;
         }
         ret
-    }
-
-    fn from_arr(arr: [f64; N]) -> Self {
-        Self::from(arr)
     }
 }
 
@@ -111,5 +119,11 @@ impl<const N: usize> From<[f64; N]> for BoxVecN<N> {
 impl<const N: usize> From<Box<[f64; N]>> for BoxVecN<N> {
     fn from(b: Box<[f64; N]>) -> Self {
         BoxVecN(b)
+    }
+}
+
+impl<const N: usize> Default for BoxVecN<N> {
+    fn defaut() -> Self {
+        BoxVecN::new()
     }
 }

@@ -1,17 +1,13 @@
-#[cfg(not(feature = "std"))]
-use core::{default::Default, ops::Add};
+use crate::Coordinate;
 
-#[cfg(feature = "std")]
-use std::{default::Default, ops::Add};
-
-use crate::{point::Point, Coordinate};
-
+#[cfg(feautre = "builder")]
 mod builder;
-pub use builder::StateBuilder;
+#[cfg(feautre = "builder")]
+pub use builder::NodeBuilder;
 
 #[derive(Debug, Clone)]
-pub struct State<T> {
-    point: Point<T>,
+pub struct Node<T> {
+    coord: T,
     error_estimate: f64,
     resistance: f64,
     error_sensitivity: f64,
@@ -19,13 +15,13 @@ pub struct State<T> {
     height: u8,
 }
 
-impl<T> State<T>
+impl<T> Node<T>
 where
     T: Coordinate,
 {
     pub fn new() -> Self {
         Self {
-            point: Point::default(),
+            coord: T::initialize(),
             error_estimate: 0.0,
             resistance: 1.0,
             error_sensitivity: 0.25,
@@ -34,7 +30,11 @@ where
         }
     }
 
-    pub fn update(&mut self, rtt: u64, remote: &Point<T>, remote_err: u64) {
+    pub fn coordinate(&self) -> &T {
+        &self.coord
+    }
+
+    pub fn update(&mut self, rtt: u64, remote: &T, remote_err: u64) {
         // @TODO assert or Err()?
 
         // balances local and remote error
@@ -47,7 +47,7 @@ where
         let relative_err = measured_err / rtt as f64;
 
         // Compute direction of error, and scale accordingly
-        let dir_of_err = self.point.direction(&remote);
+        let dir_of_err = self.coord.direction(&remote);
         let scaled_dir = dir_of_err * measured_err; // Or relative_err?
 
         // Update error estimate moving average of local error
@@ -56,10 +56,10 @@ where
 
         // Update local position
         self.resistance = self.pos_sensitivity * err_weight;
-        self.point += scaled_dir * self.resistance;
+        self.coord += scaled_dir * self.resistance;
     }
 
-    pub fn distance(&self, remote: &Point<T>) -> f64 {
-        self.point.distance(remote)
+    pub fn distance(&self, remote: &T) -> f64 {
+        self.coord.distance(remote)
     }
 }

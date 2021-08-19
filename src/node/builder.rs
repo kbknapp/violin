@@ -1,13 +1,13 @@
 #[cfg(not(feature = "std"))]
-use core::{default::Default, ops::Add};
+use core::default::Default;
 
 #[cfg(feature = "std")]
 use std::{default::Default, ops::Add};
 
-use crate::{point::Point, state::State, Coordinate};
+use crate::{Coordinate, Node::Node};
 
 #[derive(Debug, Clone, Copy)]
-pub struct StateBuilder {
+pub struct NodeBuilder {
     error_estimate: u64,
     resistance: f64,
     error_sensitivity: f64,
@@ -15,7 +15,7 @@ pub struct StateBuilder {
     height: u8,
 }
 
-impl StateBuilder {
+impl NodeBuilder {
     pub fn new() -> Self {
         Self {
             error_estimate: 0,
@@ -46,12 +46,12 @@ impl StateBuilder {
         self
     }
 
-    pub fn build<T>(self) -> State<T>
+    pub fn build<T>(self) -> Node<T>
     where
         T: Coordinate,
     {
-        State {
-            point: Point::default(),
+        Node {
+            point: T::default(),
             error_estimate: self.error_estimate as f64,
             resistance: self.resistance,
             error_sensitivity: self.error_sensitivity,
