@@ -1,3 +1,5 @@
+// Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all optimizations such as SSE
+
 #[macro_use]
 extern crate criterion;
 
