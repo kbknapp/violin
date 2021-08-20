@@ -22,12 +22,12 @@ pub fn benchmarks(c: &mut Criterion) {
         let mut peers = vec![Node::<VecN<8>>::new(); NODES as usize];
         // Pre-compute "random" rtts
         let mut rng = rand::thread_rng();
-        let die = Uniform::from(1..5000);
-        let rtts: Vec<u64> = vec![0u64; (NODES * SAMPLES) as usize]
+        let die = Uniform::from(1.0..5000.0);
+        let rtts: Vec<f64> = vec![0.0f64; (NODES * SAMPLES) as usize]
             .iter_mut()
             .map(|_rtt| die.sample(&mut rng))
             .collect();
-        let errs: Vec<u64> = vec![0u64; (NODES * SAMPLES) as usize]
+        let errs: Vec<f64> = vec![0.0f64; (NODES * SAMPLES) as usize]
             .iter_mut()
             .map(|_rtt| die.sample(&mut rng))
             .collect();

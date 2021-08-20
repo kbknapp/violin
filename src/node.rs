@@ -34,17 +34,17 @@ where
         &self.coord
     }
 
-    pub fn update(&mut self, rtt: u64, remote: &T, remote_err: u64) {
+    pub fn update(&mut self, rtt: f64, remote: &T, remote_err: f64) {
         // @TODO assert or Err()?
 
         // balances local and remote error
         //  - A high local error = greater movement
         //  - A high remote error = less movement
-        let err_weight = self.error_estimate / (self.error_estimate + remote_err as f64);
+        let err_weight = self.error_estimate / (self.error_estimate + remote_err);
 
         // Compute relative error of this sample
-        let measured_err = self.error_estimate - rtt as f64;
-        let relative_err = measured_err / rtt as f64;
+        let measured_err = self.error_estimate - rtt;
+        let relative_err = measured_err / rtt;
 
         // Compute direction of error, and scale accordingly
         let dir_of_err = self.coord.direction(&remote);
