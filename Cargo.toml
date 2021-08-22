@@ -27,6 +27,7 @@ keywords = [
 
 [[bench]]
 name = "basic"
+path = "benchs/basic.rs"
 harness = false
 
 [dependencies]
