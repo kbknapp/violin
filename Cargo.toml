@@ -26,7 +26,7 @@ keywords = [
 ]
 
 [[bench]]
-name = "benches"
+name = "basic"
 harness = false
 
 [dependencies]
