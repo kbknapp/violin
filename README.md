@@ -36,8 +36,12 @@ Ensure you have a [Rust toolchain installed][0].
 ```
 $ git clone https://github.com/kbknapp/violin
 $ cd violin
-$ cargo build --release
+$ RUSTFLAGS='-Ctarget-cpu=native' cargo build --release
 ```
+
+**NOTE:** The `RUSTFLAGS` can be omitted. However, if on a recent CPU that
+supports SIMD instructions, and the code will be run on the same CPU it's
+compiled for, including this flag can drastically improve performance.
 
 # Usage
 
