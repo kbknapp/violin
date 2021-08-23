@@ -42,6 +42,21 @@ fn setup<const N: usize>(
     (rtts, errs)
 }
 
+fn do_updates<const N: usize>(
+    nodes: &mut [Node<VecN<N>>],
+    peers: &mut [Node<VecN<N>>],
+    rtts: &[f64],
+    errs: &[f64],
+) {
+    let mut i: usize = 0;
+    while i < SAMPLES as usize {
+        for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
+            n.update(rtts[i + j], p.coordinate(), errs[i + j]);
+        }
+        i += 1;
+    }
+}
+
 pub fn benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("vivaldi");
     group.throughput(Throughput::Elements(SAMPLES * NODES));
@@ -50,105 +65,49 @@ pub fn benchmarks(c: &mut Criterion) {
         let mut nodes = vec![Node::<VecN<8>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<8>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.bench_function("heapless 7D", |b| {
         // Create Nodes
         let mut nodes = vec![Node::<VecN<7>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<7>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.bench_function("heapless 6D", |b| {
         // Create Nodes
         let mut nodes = vec![Node::<VecN<7>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<7>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.bench_function("heapless 5D", |b| {
         // Create Nodes
         let mut nodes = vec![Node::<VecN<5>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<5>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.bench_function("heapless 4D", |b| {
         // Create Nodes
         let mut nodes = vec![Node::<VecN<4>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<4>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.bench_function("heapless 3D", |b| {
         // Create Nodes
         let mut nodes = vec![Node::<VecN<3>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<3>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.bench_function("heapless 2D", |b| {
         // Create Nodes
         let mut nodes = vec![Node::<VecN<2>>::new(); NODES as usize];
         let mut peers = vec![Node::<VecN<2>>::new(); NODES as usize];
         let (rtts, errs) = setup(&mut nodes, &mut peers);
-        b.iter(|| {
-            let mut i: usize = 0;
-            while i < SAMPLES as usize {
-                for (j, (n, p)) in nodes.iter_mut().zip(peers.iter()).enumerate() {
-                    n.update(rtts[i + j], p.coordinate(), errs[i + j]);
-                }
-                i += 1;
-            }
-        })
+        b.iter(|| do_updates(&mut nodes, &mut peers, &rtts, &errs))
     });
     group.finish();
 }

@@ -30,6 +30,11 @@ name = "basic"
 path = "benches/basic.rs"
 harness = false
 
+[[bench]]
+name = "vecn"
+path = "benches/vecn.rs"
+harness = false
+
 [dependencies]
 rand = { version = "0.8.4", default-features = false }
 
