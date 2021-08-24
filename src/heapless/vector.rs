@@ -81,9 +81,9 @@ impl<const N: usize> Mul<f64> for VecN<N> {
     }
 }
 
-impl<const N: usize> Add<VecN<N>> for VecN<N> {
+impl<'a, const N: usize> Add<&'a VecN<N>> for &'a VecN<N> {
     type Output = VecN<N>;
-    fn add(self, rhs: VecN<N>) -> Self {
+    fn add(self, rhs: &VecN<N>) -> Self::Output {
         // @TODO @perf simd
 
         // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
@@ -93,6 +93,12 @@ impl<const N: usize> Add<VecN<N>> for VecN<N> {
             *n = s + r;
         }
         ret
+    }
+}
+impl<const N: usize> Add<VecN<N>> for VecN<N> {
+    type Output = VecN<N>;
+    fn add(self, rhs: VecN<N>) -> Self::Output {
+        &self + &rhs
     }
 }
 
