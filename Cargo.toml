@@ -26,26 +26,30 @@ keywords = [
 ]
 
 [[bench]]
-name = "basic"
-path = "benches/basic.rs"
+name = "heap"
+path = "benches/heap.rs"
 harness = false
 
 [[bench]]
-name = "vecn"
-path = "benches/vecn.rs"
+name = "heapless"
+path = "benches/heapless.rs"
 harness = false
 
 [dependencies]
-rand = { version = "0.8.4", default-features = false }
+rand = { version = "0.8.4", optional = true }
 
 [dev-dependencies]
-criterion = "0.3.5"
+criterion = "0.4.0"
 rand = "0.8.4"
 
 [features]
-default = ["std"]
-nightly = [] # Enable nighlty or experiemental features
+default = ["std", "alloc"]
+nightly = [] # Enable nightly or experiemental features
 doc     = [] # Used when compiling docs
-builder = [] # Enable the "Builder Pattern" for Node
 std     = ["rand/std"] # Enable stdlib support
 alloc   = ["rand/alloc"] # Enable heap allocations
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+rustc-args = ["--cfg", "docsrs"]
