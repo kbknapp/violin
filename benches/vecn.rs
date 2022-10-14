@@ -1,4 +1,5 @@
-// Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all optimizations such as SSE
+// Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all
+// optimizations such as SSE
 
 #[macro_use]
 extern crate criterion;
@@ -15,7 +16,8 @@ fn setup<const N: usize>(nodes: &mut Vec<VecN<N>>, peers: &mut Vec<VecN<N>>) {
     // Pre-compute "random" rtts
     let mut rng = rand::thread_rng();
     let die = Uniform::from(-5.0..5.0);
-    // Pre-move the peers at least once so they're not all clustered around the origin
+    // Pre-move the peers at least once so they're not all clustered around the
+    // origin
     for _ in 0..nodes.len() {
         let mut n = VecN::<N>::new();
         for nn in n.iter_mut() {

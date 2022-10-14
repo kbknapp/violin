@@ -20,17 +20,11 @@ use crate::Coordinate;
 pub struct VecN<const N: usize>([f64; N]);
 
 impl<const N: usize> VecN<N> {
-    pub fn new() -> Self {
-        VecN([0.0f64; N])
-    }
+    pub fn new() -> Self { VecN([0.0f64; N]) }
 
-    pub fn iter(&self) -> impl Iterator<Item = &f64> {
-        self.0.iter()
-    }
+    pub fn iter(&self) -> impl Iterator<Item = &f64> { self.0.iter() }
 
-    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut f64> {
-        self.0.iter_mut()
-    }
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut f64> { self.0.iter_mut() }
 }
 
 impl<const N: usize> Coordinate for VecN<N> {
@@ -56,8 +50,8 @@ impl<const N: usize> Coordinate for VecN<N> {
     fn direction(&self, other: &Self) -> Self {
         // @TODO @perf simd
 
-        // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
-        // arrays so maybe not a big deal
+        // @TODO @perf this allocates (stack) and zeros the array...granted we're
+        // talking small arrays so maybe not a big deal
         let mut ret = VecN::new();
         for (n, (s, r)) in ret.0.iter_mut().zip(self.0.iter().zip(other.0.iter())) {
             *n = s - r;
@@ -68,11 +62,12 @@ impl<const N: usize> Coordinate for VecN<N> {
 
 impl<const N: usize> Mul<f64> for VecN<N> {
     type Output = VecN<N>;
+
     fn mul(self, rhs: f64) -> Self {
         // @TODO @perf simd
 
-        // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
-        // arrays so maybe not a big deal
+        // @TODO @perf this allocates (stack) and zeros the array...granted we're
+        // talking small arrays so maybe not a big deal
         let mut ret = VecN::new();
         for (n, s) in ret.0.iter_mut().zip(self.0.iter()) {
             *n = s * rhs;
@@ -83,11 +78,12 @@ impl<const N: usize> Mul<f64> for VecN<N> {
 
 impl<'a, const N: usize> Add<&'a VecN<N>> for &'a VecN<N> {
     type Output = VecN<N>;
+
     fn add(self, rhs: &VecN<N>) -> Self::Output {
         // @TODO @perf simd
 
-        // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
-        // arrays so maybe not a big deal
+        // @TODO @perf this allocates (stack) and zeros the array...granted we're
+        // talking small arrays so maybe not a big deal
         let mut ret = VecN::new();
         for (n, (s, r)) in ret.0.iter_mut().zip(self.0.iter().zip(rhs.0.iter())) {
             *n = s + r;
@@ -97,9 +93,8 @@ impl<'a, const N: usize> Add<&'a VecN<N>> for &'a VecN<N> {
 }
 impl<const N: usize> Add<VecN<N>> for VecN<N> {
     type Output = VecN<N>;
-    fn add(self, rhs: VecN<N>) -> Self::Output {
-        &self + &rhs
-    }
+
+    fn add(self, rhs: VecN<N>) -> Self::Output { &self + &rhs }
 }
 
 impl<const N: usize> AddAssign<VecN<N>> for VecN<N> {
@@ -113,13 +108,9 @@ impl<const N: usize> AddAssign<VecN<N>> for VecN<N> {
 }
 
 impl<const N: usize> From<[f64; N]> for VecN<N> {
-    fn from(arr: [f64; N]) -> Self {
-        VecN(arr)
-    }
+    fn from(arr: [f64; N]) -> Self { VecN(arr) }
 }
 
 impl<const N: usize> Default for VecN<N> {
-    fn default() -> Self {
-        VecN::new()
-    }
+    fn default() -> Self { VecN::new() }
 }

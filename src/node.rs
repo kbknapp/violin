@@ -23,7 +23,8 @@ where
     ///
     /// # Allocation
     ///
-    /// This calls `<T as Coordinate>::initialize` which may allocate depending on `T`'s impl
+    /// This calls `<T as Coordinate>::initialize` which may allocate depending
+    /// on `T`'s impl
     pub fn new() -> Self {
         Self {
             coord: T::initialize(),
@@ -35,12 +36,13 @@ where
         }
     }
 
-    /// Create a new node with a given constant height (a value that should be subtracted when
-    /// calculating the RTT updates)
+    /// Create a new node with a given constant height (a value that should be
+    /// subtracted when calculating the RTT updates)
     ///
     /// # Allocation
     ///
-    /// This calls `<T as Coordinate>::initialize` which may allocate depending on `T`'s impl
+    /// This calls `<T as Coordinate>::initialize` which may allocate depending
+    /// on `T`'s impl
     pub fn with_height(h: u8) -> Self {
         Self {
             coord: T::initialize(),
@@ -53,25 +55,21 @@ where
     }
 
     /// Get the current coordinate unit vector
-    pub fn coordinate(&self) -> &T {
-        &self.coord
-    }
+    pub fn coordinate(&self) -> &T { &self.coord }
 
     /// Get the current error estimate
-    pub fn error_estimate(&self) -> f64 {
-        self.error_estimate
-    }
+    pub fn error_estimate(&self) -> f64 { self.error_estimate }
 
-    // Estimate the distance between this node's coordinate and the remote coordinate
-    pub fn distance(&self, remote: &T) -> f64 {
-        self.coord.distance(remote)
-    }
+    // Estimate the distance between this node's coordinate and the remote
+    // coordinate
+    pub fn distance(&self, remote: &T) -> f64 { self.coord.distance(remote) }
 
-    /// Update the node's coordinate based off the RTT of the `remote` coordinate along with the
-    /// `remote`'s current error estimate..
+    /// Update the node's coordinate based off the RTT of the `remote`
+    /// coordinate along with the `remote`'s current error estimate..
     ///
-    /// A high remote error estimate will reduce the "force" applied to this node's movement (i.e.
-    /// it will move less because the remote is asserting that it is less confident in the accuracy
+    /// A high remote error estimate will reduce the "force" applied to this
+    /// node's movement (i.e. it will move less because the remote is
+    /// asserting that it is less confident in the accuracy
     /// of it's coordinate position.)
     pub fn update(&mut self, rtt: f64, remote: &T, remote_err: f64) {
         // @TODO assert or Err()?

@@ -1,5 +1,5 @@
-// This example shows how to create a node and update it's coordinates with an arbitrary Round
-// Trip Time (RTT) (usually measured in milliseconds).
+// This example shows how to create a node and update it's coordinates with an
+// arbitrary Round Trip Time (RTT) (usually measured in milliseconds).
 //
 // Run this example with `cargo run --example basic`
 use rand::distributions::Distribution;
@@ -18,7 +18,8 @@ fn main() {
     let mut node = Node::<VecN<8>>::new();
     let mut peer = Node::<VecN<8>>::new();
 
-    // Generate "random" RTTs (these would normally be determined from real latencies)
+    // Generate "random" RTTs (these would normally be determined from real
+    // latencies)
     let mut rng = rand::thread_rng();
     let die = rand::distributions::Uniform::from(1.0..5000.0); // synthetic latenies will range
                                                                // from 1 to 5000 ms
@@ -36,7 +37,7 @@ fn main() {
     println!("node coordinates: {:?}", node.coordinate());
     println!("peer coordinates: {:?}", peer.coordinate());
     println!("---");
-    // In a real application there would probably more than two nodes...but this shows how to
-    // get a distance estimate.
+    // In a real application there would probably more than two nodes...but this
+    // shows how to get a distance estimate.
     println!("Estimated Distance: {}", node.distance(peer.coordinate()));
 }

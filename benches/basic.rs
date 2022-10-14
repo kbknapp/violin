@@ -1,4 +1,5 @@
-// Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all optimizations such as SSE
+// Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all
+// optimizations such as SSE
 
 #[macro_use]
 extern crate criterion;
@@ -26,7 +27,8 @@ fn setup<const N: usize>(
         .iter_mut()
         .map(|_rtt| die.sample(&mut rng))
         .collect();
-    // Pre-move the peers at least once so they're not all clustered around the origin
+    // Pre-move the peers at least once so they're not all clustered around the
+    // origin
     for (i, n) in rtts.iter().enumerate() {
         if let Some(peer) = peers.get_mut(i % NODES as usize) {
             if let Some(node) = nodes.get(i + 1) {

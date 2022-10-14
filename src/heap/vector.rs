@@ -16,7 +16,10 @@ use core::{
     ops::{Add, AddAssign, Mul},
 };
 
-use rand::distributions::{Distribution, Uniform};
+use rand::{
+    distributions::{Distribution, Uniform},
+    Rng,
+};
 
 use crate::Coordinate;
 
@@ -24,17 +27,11 @@ use crate::Coordinate;
 pub struct BoxVecN<const N: usize>(Box<[f64; N]>);
 
 impl<const N: usize> BoxVecN<N> {
-    pub fn new() -> Self {
-        BoxVecN(Box::new([0.0f64; N]))
-    }
+    pub fn new() -> Self { BoxVecN(Box::new([0.0f64; N])) }
 
-    pub fn iter(&self) -> impl Iterator<Item = &f64> {
-        self.0.iter()
-    }
+    pub fn iter(&self) -> impl Iterator<Item = &f64> { self.0.iter() }
 
-    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut f64> {
-        self.0.iter_mut()
-    }
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut f64> { self.0.iter_mut() }
 }
 
 impl<const N: usize> Coordinate for BoxVecN<N> {
@@ -60,8 +57,8 @@ impl<const N: usize> Coordinate for BoxVecN<N> {
     fn direction(&self, other: &Self) -> Self {
         // @TODO @perf simd
 
-        // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
-        // arrays so maybe not a big deal
+        // @TODO @perf this allocates (stack) and zeros the array...granted we're
+        // talking small arrays so maybe not a big deal
         let mut ret = BoxVecN::new();
         for (n, (s, r)) in ret.0.iter_mut().zip(self.0.iter().zip(other.0.iter())) {
             *n = s - r;
@@ -72,11 +69,12 @@ impl<const N: usize> Coordinate for BoxVecN<N> {
 
 impl<const N: usize> Mul<f64> for BoxVecN<N> {
     type Output = BoxVecN<N>;
+
     fn mul(self, rhs: f64) -> Self {
         // @TODO @perf simd
 
-        // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
-        // arrays so maybe not a big deal
+        // @TODO @perf this allocates (stack) and zeros the array...granted we're
+        // talking small arrays so maybe not a big deal
         let mut ret = BoxVecN::new();
         for (n, s) in ret.0.iter_mut().zip(self.0.iter()) {
             *n = s * rhs;
@@ -87,11 +85,12 @@ impl<const N: usize> Mul<f64> for BoxVecN<N> {
 
 impl<const N: usize> Add<BoxVecN<N>> for BoxVecN<N> {
     type Output = BoxVecN<N>;
+
     fn add(self, rhs: BoxVecN<N>) -> Self {
         // @TODO @perf simd
 
-        // @TODO @perf this allocates (stack) and zeros the array...granted we're talking small
-        // arrays so maybe not a big deal
+        // @TODO @perf this allocates (stack) and zeros the array...granted we're
+        // talking small arrays so maybe not a big deal
         let mut ret = BoxVecN::new();
         for (n, (s, r)) in ret.0.iter_mut().zip(self.0.iter().zip(rhs.0.iter())) {
             *n = s + r;
@@ -111,19 +110,13 @@ impl<const N: usize> AddAssign<BoxVecN<N>> for BoxVecN<N> {
 }
 
 impl<const N: usize> From<[f64; N]> for BoxVecN<N> {
-    fn from(arr: [f64; N]) -> Self {
-        BoxVecN(Box::new(arr))
-    }
+    fn from(arr: [f64; N]) -> Self { BoxVecN(Box::new(arr)) }
 }
 
 impl<const N: usize> From<Box<[f64; N]>> for BoxVecN<N> {
-    fn from(b: Box<[f64; N]>) -> Self {
-        BoxVecN(b)
-    }
+    fn from(b: Box<[f64; N]>) -> Self { BoxVecN(b) }
 }
 
 impl<const N: usize> Default for BoxVecN<N> {
-    fn defaut() -> Self {
-        BoxVecN::new()
-    }
+    fn defaut() -> Self { BoxVecN::new() }
 }
