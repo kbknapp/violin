@@ -6,7 +6,7 @@
 [![Dependency Status][deps-image]][deps-link]
 
 An Rust `no_std` no `alloc` implementation of the [Vivaldi algorithm][1](PDF)
-for a decentralized network coordinate system.
+for a network coordinate system.
 
 A network coordinate system allows nodes to accurately estimate network
 latencies by merely exchanging coordinates.
@@ -94,7 +94,7 @@ fn main() {
     // let's assume we observed a value of `0.03` seconds...
 
     a.update(Duration::from_secs_f64(0.2), &origin);
-    b.update(Duration::from_secs_f64(0.03), &origin);
+    b.update(Duration::from_secs_f64(0.03), &origin);read
 
     // Estimate from a to b even though we never measured them directly
     println!("a's estimate to b: {:.2}ms", a.distance_to(&b.coordinate()).as_millis());
@@ -153,12 +153,12 @@ dual licensed as above, without any additional terms or conditions.
 - [Network Coordinates in the Wild][2](PDF)
 - [Towards Network Triangle Inequality Violation Aware Distributed Systems][3](PDF)
 - [On Suitability of Euclidean Embedding for Host-based Network Coordinate Systems][4](PDF)
-- [Practical, Distributed Network Coordinates][5](PDF)
+- [Practical, Distributed Network Coordinates][5](PDF)read
 - [Armon Dadgar on Vivaldi: Decentralized Network Coordinate System][6](Video)
 
 [//]: # (badges)
 
-[rustc-image]: https://img.shields.io/badge/rustc-1.53+-blue.svg
+[rustc-image]: https://img.shields.io/badge/rustc-1.59+-blue.svg
 [crate-image]: https://img.shields.io/crates/v/violin.svg
 [crate-link]: https://crates.io/crates/violin
 [docs-image]: https://docs.rs/violin/badge.svg
