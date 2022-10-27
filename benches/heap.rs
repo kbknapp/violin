@@ -1,6 +1,8 @@
 // Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all
 // optimizations such as SSE
 
+#![cfg_attr(not(feature = "alloc"), allow(unused_imports))]
+
 #[macro_use]
 extern crate criterion;
 
@@ -9,12 +11,15 @@ use std::time::Duration;
 use criterion::{Criterion, Throughput};
 use rand::distributions::{Distribution, Uniform};
 
-use violin::{Config, Coord, Node, VecD, Vector};
+#[cfg(feature = "alloc")]
+use violin::heap::VecD;
+use violin::{Config, Coord, Node, Vector};
 
 const SAMPLES: u64 = 100;
 const NODES: u64 = 10_000;
 
 // Pre-compute "random" rtts
+#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn gen_duration_rtts() -> Vec<Duration> {
     gen_rtts()
         .iter()
@@ -22,6 +27,7 @@ fn gen_duration_rtts() -> Vec<Duration> {
         .collect()
 }
 
+#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn gen_rtts() -> Vec<f64> {
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1.0e-5..5.0);
@@ -33,6 +39,7 @@ fn gen_rtts() -> Vec<f64> {
     rtts
 }
 
+#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn do_node_updates<T: Vector + Clone>(
     nodes: &mut [Node<T>],
     peers: &mut [Node<T>],
@@ -47,6 +54,7 @@ fn do_node_updates<T: Vector + Clone>(
     }
 }
 
+#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn do_coord_updates<T: Vector + Clone>(
     nodes: &mut [Coord<T>],
     peers: &mut [Coord<T>],
@@ -62,27 +70,33 @@ fn do_coord_updates<T: Vector + Clone>(
     }
 }
 
+#[cfg(not(feature = "alloc"))]
+pub fn benchmarks(_c: &mut Criterion) {
+    panic!("must compile with feature = \"alloc\"");
+}
+
+#[cfg(feature = "alloc")]
 pub fn benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("violin::Node");
     group.throughput(Throughput::Elements(SAMPLES * NODES));
     group.bench_function("heap 8D (0 adjustment window)", |b| {
         // Create Coords
-        let mut nodes = vec![Node::<VecD<8>>::rand(); NODES as usize];
-        let mut peers = vec![Node::<VecD<8>>::rand(); NODES as usize];
+        let mut nodes = vec![Node::<VecD<8>>::default(); NODES as usize];
+        let mut peers = vec![Node::<VecD<8>>::default(); NODES as usize];
         let rtts = gen_duration_rtts();
         b.iter(|| do_node_updates(&mut nodes, &mut peers, &rtts))
     });
     group.bench_function("heap 4D (0 adjustment window)", |b| {
         // Create Coords
-        let mut nodes = vec![Node::<VecD<4>>::rand(); NODES as usize];
-        let mut peers = vec![Node::<VecD<4>>::rand(); NODES as usize];
+        let mut nodes = vec![Node::<VecD<4>>::default(); NODES as usize];
+        let mut peers = vec![Node::<VecD<4>>::default(); NODES as usize];
         let rtts = gen_duration_rtts();
         b.iter(|| do_node_updates(&mut nodes, &mut peers, &rtts))
     });
     group.bench_function("heap 2D (0 adjustment window)", |b| {
         // Create Coords
-        let mut nodes = vec![Node::<VecD<2>>::rand(); NODES as usize];
-        let mut peers = vec![Node::<VecD<2>>::rand(); NODES as usize];
+        let mut nodes = vec![Node::<VecD<2>>::default(); NODES as usize];
+        let mut peers = vec![Node::<VecD<2>>::default(); NODES as usize];
         let rtts = gen_duration_rtts();
         b.iter(|| do_node_updates(&mut nodes, &mut peers, &rtts))
     });
@@ -92,24 +106,24 @@ pub fn benchmarks(c: &mut Criterion) {
     group.throughput(Throughput::Elements(SAMPLES * NODES));
     group.bench_function("heap 8D", |b| {
         // Create Coords
-        let mut nodes = vec![Coord::<VecD<8>>::rand(); NODES as usize];
-        let mut peers = vec![Coord::<VecD<8>>::rand(); NODES as usize];
+        let mut nodes = vec![Coord::<VecD<8>>::default(); NODES as usize];
+        let mut peers = vec![Coord::<VecD<8>>::default(); NODES as usize];
         let rtts = gen_rtts();
         let cfg = Config::default();
         b.iter(|| do_coord_updates(&mut nodes, &mut peers, &cfg, &rtts))
     });
     group.bench_function("heap 4D", |b| {
         // Create Coords
-        let mut nodes = vec![Coord::<VecD<4>>::rand(); NODES as usize];
-        let mut peers = vec![Coord::<VecD<4>>::rand(); NODES as usize];
+        let mut nodes = vec![Coord::<VecD<4>>::default(); NODES as usize];
+        let mut peers = vec![Coord::<VecD<4>>::default(); NODES as usize];
         let rtts = gen_rtts();
         let cfg = Config::default();
         b.iter(|| do_coord_updates(&mut nodes, &mut peers, &cfg, &rtts))
     });
     group.bench_function("heap 2D", |b| {
         // Create Coords
-        let mut nodes = vec![Coord::<VecD<2>>::rand(); NODES as usize];
-        let mut peers = vec![Coord::<VecD<2>>::rand(); NODES as usize];
+        let mut nodes = vec![Coord::<VecD<2>>::default(); NODES as usize];
+        let mut peers = vec![Coord::<VecD<2>>::default(); NODES as usize];
         let rtts = gen_rtts();
         let cfg = Config::default();
         b.iter(|| do_coord_updates(&mut nodes, &mut peers, &cfg, &rtts))

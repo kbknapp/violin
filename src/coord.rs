@@ -164,7 +164,7 @@ where
 
         // Compute relative error of this sample.
         let dist = self.vec.distance(&other.vec);
-        let err = (dist - rtt).abs() / rtt;
+        let err = f64::max(dist - rtt, 0.0) / rtt;
 
         // Update weighted moving average of local error
         self.error_estimate =
@@ -179,7 +179,8 @@ where
     /// Gravity pulls the coordinate back toward the origin to prevent drift
     pub fn apply_gravity(&mut self, origin: &Coord<T>, cfg: &Config) {
         let dist = self.distance_to(origin);
-        let force = -1.0 * f64::powf(dist / cfg.gravity_rho, 2.0);
+        let rel_grav = dist / cfg.gravity_rho;
+        let force = -1.0 * (rel_grav * rel_grav);
         self.apply_force_from(origin, force, cfg);
     }
 
@@ -222,6 +223,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(not(feature = "alloc"))]
+    use crate::heapless::VecD;
 
     #[test]
     fn apply_force_from() {

@@ -67,22 +67,22 @@ pub fn benchmarks(c: &mut Criterion) {
     group.throughput(Throughput::Elements(SAMPLES * NODES));
     group.bench_function("heapless 8D (0 adjustment window)", |b| {
         // Create Coords
-        let mut nodes = vec![Node::<VecD<8>>::rand(); NODES as usize];
-        let mut peers = vec![Node::<VecD<8>>::rand(); NODES as usize];
+        let mut nodes = vec![Node::<VecD<8>>::default(); NODES as usize];
+        let mut peers = vec![Node::<VecD<8>>::default(); NODES as usize];
         let rtts = gen_duration_rtts();
         b.iter(|| do_node_updates(&mut nodes, &mut peers, &rtts))
     });
     group.bench_function("heapless 4D (0 adjustment window)", |b| {
         // Create Coords
-        let mut nodes = vec![Node::<VecD<4>>::rand(); NODES as usize];
-        let mut peers = vec![Node::<VecD<4>>::rand(); NODES as usize];
+        let mut nodes = vec![Node::<VecD<4>>::default(); NODES as usize];
+        let mut peers = vec![Node::<VecD<4>>::default(); NODES as usize];
         let rtts = gen_duration_rtts();
         b.iter(|| do_node_updates(&mut nodes, &mut peers, &rtts))
     });
     group.bench_function("heapless 2D (0 adjustment window)", |b| {
         // Create Coords
-        let mut nodes = vec![Node::<VecD<2>>::rand(); NODES as usize];
-        let mut peers = vec![Node::<VecD<2>>::rand(); NODES as usize];
+        let mut nodes = vec![Node::<VecD<2>>::default(); NODES as usize];
+        let mut peers = vec![Node::<VecD<2>>::default(); NODES as usize];
         let rtts = gen_duration_rtts();
         b.iter(|| do_node_updates(&mut nodes, &mut peers, &rtts))
     });
@@ -92,24 +92,24 @@ pub fn benchmarks(c: &mut Criterion) {
     group.throughput(Throughput::Elements(SAMPLES * NODES));
     group.bench_function("heapless 8D", |b| {
         // Create Coords
-        let mut nodes = vec![Coord::<VecD<8>>::rand(); NODES as usize];
-        let mut peers = vec![Coord::<VecD<8>>::rand(); NODES as usize];
+        let mut nodes = vec![Coord::<VecD<8>>::default(); NODES as usize];
+        let mut peers = vec![Coord::<VecD<8>>::default(); NODES as usize];
         let rtts = gen_rtts();
         let cfg = Config::default();
         b.iter(|| do_coord_updates(&mut nodes, &mut peers, &cfg, &rtts))
     });
     group.bench_function("heapless 4D", |b| {
         // Create Coords
-        let mut nodes = vec![Coord::<VecD<4>>::rand(); NODES as usize];
-        let mut peers = vec![Coord::<VecD<4>>::rand(); NODES as usize];
+        let mut nodes = vec![Coord::<VecD<4>>::default(); NODES as usize];
+        let mut peers = vec![Coord::<VecD<4>>::default(); NODES as usize];
         let rtts = gen_rtts();
         let cfg = Config::default();
         b.iter(|| do_coord_updates(&mut nodes, &mut peers, &cfg, &rtts))
     });
     group.bench_function("heapless 2D", |b| {
         // Create Coords
-        let mut nodes = vec![Coord::<VecD<2>>::rand(); NODES as usize];
-        let mut peers = vec![Coord::<VecD<2>>::rand(); NODES as usize];
+        let mut nodes = vec![Coord::<VecD<2>>::default(); NODES as usize];
+        let mut peers = vec![Coord::<VecD<2>>::default(); NODES as usize];
         let rtts = gen_rtts();
         let cfg = Config::default();
         b.iter(|| do_coord_updates(&mut nodes, &mut peers, &cfg, &rtts))

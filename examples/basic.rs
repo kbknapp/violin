@@ -14,9 +14,9 @@ fn main() {
     //
     // Number of diminsions is based on topology, but powers of two (2, 4, 8, 16,
     // etc.) may allow better performance in some cases.
-    let origin = Coord::<VecD<8>>::rand();
-    let mut a = Node::<VecD<8>>::rand();
-    let mut b = Node::<VecD<8>>::rand();
+    let origin = Coord::<VecD<8>>::default();
+    let mut a = Node::<VecD<8>>::default();
+    let mut b = Node::<VecD<8>>::default();
 
     let (a_real, a_rtts) = gen_synthetic_latencies();
     let (b_real, b_rtts) = gen_synthetic_latencies();
