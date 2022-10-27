@@ -5,7 +5,7 @@
 //! [![Documentation][docs-image]][docs-link]
 //! [![Dependency Status][deps-image]][deps-link]
 //!
-//! An Rust `no_std` no `alloc` implementation of the [Vivaldi
+//! A Rust `no_std` no `alloc` implementation of the [Vivaldi
 //! algorithm][1](PDF) for a decentralized network coordinate system.
 //!
 //! A network coordinate system allows nodes to accurately estimate network

@@ -5,7 +5,7 @@
 [![Documentation][docs-image]][docs-link]
 [![Dependency Status][deps-image]][deps-link]
 
-An Rust `no_std` no `alloc` implementation of the [Vivaldi algorithm][1](PDF)
+A Rust `no_std` no `alloc` implementation of the [Vivaldi algorithm][1](PDF)
 for a network coordinate system.
 
 A network coordinate system allows nodes to accurately estimate network
@@ -94,7 +94,7 @@ fn main() {
     // let's assume we observed a value of `0.03` seconds...
 
     a.update(Duration::from_secs_f64(0.2), &origin);
-    b.update(Duration::from_secs_f64(0.03), &origin);read
+    b.update(Duration::from_secs_f64(0.03), &origin);
 
     // Estimate from a to b even though we never measured them directly
     println!("a's estimate to b: {:.2}ms", a.distance_to(&b.coordinate()).as_millis());
@@ -153,7 +153,7 @@ dual licensed as above, without any additional terms or conditions.
 - [Network Coordinates in the Wild][2](PDF)
 - [Towards Network Triangle Inequality Violation Aware Distributed Systems][3](PDF)
 - [On Suitability of Euclidean Embedding for Host-based Network Coordinate Systems][4](PDF)
-- [Practical, Distributed Network Coordinates][5](PDF)read
+- [Practical, Distributed Network Coordinates][5](PDF)
 - [Armon Dadgar on Vivaldi: Decentralized Network Coordinate System][6](Video)
 
 [//]: # (badges)
