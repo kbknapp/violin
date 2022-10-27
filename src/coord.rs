@@ -248,19 +248,23 @@ mod tests {
 
     #[test]
     fn min_height_factor() {
-        let mut cfg = Config::default();
-        cfg.height_min = 0.01;
+        let cfg = Config {
+            height_min: 0.01,
+            ..Default::default()
+        };
         let mut origin = Coord::new();
         let above = Coord::from(VecD::from([0.0, 0.0, 2.9]));
         origin.apply_force_from(&above, 5.3, &cfg);
         assert_eq!(origin.raw_coord().as_ref(), &[0.0, 0.0, -5.3]);
-        assert_eq!(origin.height, 0.028275862068965518);
+        assert_eq!(origin.height, 0.028_275_862_068_965_52);
     }
 
     #[test]
     fn min_height() {
-        let mut cfg = Config::default();
-        cfg.height_min = 10.0;
+        let cfg = Config {
+            height_min: 10.0,
+            ..Default::default()
+        };
         let mut origin = Coord::new();
         let above = Coord::from(VecD::from([0.0, 0.0, 2.9]));
         origin.apply_force_from(&above, -5.3, &cfg);

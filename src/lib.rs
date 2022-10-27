@@ -68,28 +68,26 @@
 //! use std::time::Duration;
 //! use violin::{heapless::VecD, Coord, Node};
 //!
-//! fn main() {
-//!     // Create two nodes and an "origin" coordinate, all using a 4-Dimensional
-//!     // coordinate. `VecD` is a dimensional vector.
-//!     let origin = Coord::<VecD<4>>::rand();
-//!     let mut a = Node::<VecD<4>>::rand();
-//!     let mut b = Node::<VecD<4>>::rand();
+//! // Create two nodes and an "origin" coordinate, all using a 4-Dimensional
+//! // coordinate. `VecD` is a dimensional vector.
+//! let origin = Coord::<VecD<4>>::rand();
+//! let mut a = Node::<VecD<4>>::rand();
+//! let mut b = Node::<VecD<4>>::rand();
 //!
-//!     // **conduct some latency measurement from a to origin**
-//!     // let's assume we observed a value of `0.2` seconds...
-//!     //
-//!     // **conduct some latency measurement from b to origin**
-//!     // let's assume we observed a value of `0.03` seconds...
+//! // **conduct some latency measurement from a to origin**
+//! // let's assume we observed a value of `0.2` seconds...
+//! //
+//! // **conduct some latency measurement from b to origin**
+//! // let's assume we observed a value of `0.03` seconds...
 //!
-//!     a.update(Duration::from_secs_f64(0.2), &origin);
-//!     b.update(Duration::from_secs_f64(0.03), &origin);
+//! a.update(Duration::from_secs_f64(0.2), &origin);
+//! b.update(Duration::from_secs_f64(0.03), &origin);
 //!
-//!     // Estimate from a to b even though we never measured them directly
-//!     println!(
-//!         "a's estimate to b: {:.2}ms",
-//!         a.distance_to(&b.coordinate()).as_millis()
-//!     );
-//! }
+//! // Estimate from a to b even though we never measured them directly
+//! println!(
+//!     "a's estimate to b: {:.2}ms",
+//!     a.distance_to(&b.coordinate()).as_millis()
+//! );
 //! ```
 //!
 //! ## Benchmarks
