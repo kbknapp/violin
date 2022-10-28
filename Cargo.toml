@@ -30,6 +30,7 @@ keywords = [
 name = "heap"
 path = "benches/heap.rs"
 harness = false
+required-features = ["alloc"]
 
 [[bench]]
 name = "heapless"

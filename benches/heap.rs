@@ -1,8 +1,6 @@
 // Run with `RUSTFLAGS='-Ctarget-cpu=native' cargo bench` to enable all
 // optimizations such as SSE
 
-#![cfg_attr(not(feature = "alloc"), allow(unused_imports))]
-
 #[macro_use]
 extern crate criterion;
 
@@ -11,15 +9,12 @@ use std::time::Duration;
 use criterion::{Criterion, Throughput};
 use rand::distributions::{Distribution, Uniform};
 
-#[cfg(feature = "alloc")]
-use violin::heap::VecD;
-use violin::{Config, Coord, Node, Vector};
+use violin::{heap::VecD, Config, Coord, Node, Vector};
 
 const SAMPLES: u64 = 100;
 const NODES: u64 = 10_000;
 
 // Pre-compute "random" rtts
-#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn gen_duration_rtts() -> Vec<Duration> {
     gen_rtts()
         .iter()
@@ -27,7 +22,6 @@ fn gen_duration_rtts() -> Vec<Duration> {
         .collect()
 }
 
-#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn gen_rtts() -> Vec<f64> {
     let mut rng = rand::thread_rng();
     let die = Uniform::from(1.0e-5..5.0);
@@ -39,7 +33,6 @@ fn gen_rtts() -> Vec<f64> {
     rtts
 }
 
-#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn do_node_updates<T: Vector + Clone>(
     nodes: &mut [Node<T>],
     peers: &mut [Node<T>],
@@ -54,7 +47,6 @@ fn do_node_updates<T: Vector + Clone>(
     }
 }
 
-#[cfg_attr(not(feature = "alloc"), allow(dead_code))]
 fn do_coord_updates<T: Vector + Clone>(
     nodes: &mut [Coord<T>],
     peers: &mut [Coord<T>],
@@ -70,12 +62,6 @@ fn do_coord_updates<T: Vector + Clone>(
     }
 }
 
-#[cfg(not(feature = "alloc"))]
-pub fn benchmarks(_c: &mut Criterion) {
-    panic!("must compile with feature = \"alloc\"");
-}
-
-#[cfg(feature = "alloc")]
 pub fn benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("violin::Node");
     group.throughput(Throughput::Elements(SAMPLES * NODES));
