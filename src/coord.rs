@@ -15,7 +15,7 @@ pub struct Coord<T> {
     /// are given as the `other` to other coordinates.
     pub(crate) error_estimate: f64,
     /// Using a height can increase the accuracy accounting for network
-    /// anomolies. Height is handled automatically as part of the update and
+    /// anomalies. Height is handled automatically as part of the update and
     /// adjustment calculations.
     pub(crate) height: f64,
     /// Positive manual additions to distance calculations. Negative offsets are

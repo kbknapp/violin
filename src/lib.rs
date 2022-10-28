@@ -271,7 +271,7 @@ where
     fn unit_vector_from(&self, other: &Self) -> (f64, Self) {
         let diff = self.difference(other);
         let mag = diff.magnitude();
-        // If the coordinates overlap return a unit vector in the first dimmension
+        // If the coordinates overlap return a unit vector in the first dimension
         if mag < OVERLAP_THRESHOLD {
             let mut ret = Self::default();
             ret.as_mut()[0] = 1.0;

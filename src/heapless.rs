@@ -5,7 +5,7 @@ use crate::{
     Vector,
 };
 
-/// A `VecD` is a coordiante vector made up of some number of `f64`s stored as
+/// A `VecD` is a coordinate vector made up of some number of `f64`s stored as
 /// an array
 ///
 /// ```rust

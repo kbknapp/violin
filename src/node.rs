@@ -136,7 +136,7 @@ where
     ///
     /// # Errors
     ///
-    /// Returns an error if update cuased the coordinate to become invalid
+    /// Returns an error if update caused the coordinate to become invalid
     pub fn try_update(&mut self, rtt: Duration, other: &Coord<V>) -> Result<()> {
         let rtt = f64::max(f64::MIN_POSITIVE, rtt.as_secs_f64());
 
