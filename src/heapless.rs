@@ -41,20 +41,26 @@ mod tests {
 
     #[test]
     fn distance() {
-        assert_eq!(
-            VecD::from([1., 0., 5.]).distance(&VecD::from([0., 2., 4.])),
-            2.449489742783178
-        );
+        let dist = VecD::from([1., 0., 5.]).distance(&VecD::from([0., 2., 4.]));
+        #[cfg(feature = "std")]
+        assert_eq!(dist, 2.449489742783178);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(dist, 2.44948974);
     }
 
     #[test]
     fn magnitude() {
         assert_eq!(VecD::<3>::default().magnitude(), 0.0);
-        assert_eq!(VecD::from([1.0, -2.0, 3.0]).magnitude(), 3.7416573867739413);
         assert_eq!(VecD::from([-2., 4., -4.]).magnitude(), 6.0f64);
+
+        #[cfg(feature = "std")]
+        assert_eq!(VecD::from([1.0, -2.0, 3.0]).magnitude(), 3.7416573867739413);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(VecD::from([1.0, -2.0, 3.0]).magnitude(), 3.74165739);
     }
 
-    #[test]
+    #[cfg_attr(feature = "std", test)]
+    #[cfg(feature = "std")]
     fn unit_vector() {
         let (_, uv) = VecD::from([1., 0., 5.]).unit_vector_from(&VecD::from([0., 2., 4.]));
         assert_eq!(
@@ -68,6 +74,27 @@ mod tests {
         assert_eq!(
             uv,
             VecD::from([0.18257418583505536, 0.511207720338155, 0.8398412548412546])
+        );
+        let uv_mag = uv.magnitude();
+        assert!(uv_mag > 0.9999999 && uv_mag <= 1.0);
+        assert_eq!(mag, a.difference(&b).magnitude());
+    }
+
+    #[cfg_attr(not(feature = "std"), test)]
+    #[cfg(not(feature = "std"))]
+    fn unit_vector_no_std() {
+        let (_, uv) = VecD::from([1., 0., 5.]).unit_vector_from(&VecD::from([0., 2., 4.]));
+        assert_eq!(
+            uv,
+            VecD::from([0.408248290927726, -0.816496581855452, 0.408248290927726])
+        );
+
+        let a = VecD::from([1.0, 2.0, 3.0]);
+        let b = VecD::from([0.5, 0.6, 0.7]);
+        let (mag, uv) = a.unit_vector_from(&b);
+        assert_eq!(
+            uv,
+            VecD::from([0.18257418567011074, 0.5112077198763101, 0.8398412540825093])
         );
         let uv_mag = uv.magnitude();
         assert!(uv_mag > 0.9999999 && uv_mag <= 1.0);

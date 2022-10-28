@@ -84,8 +84,8 @@ where
     /// Estimate the distance between this coordinate and the other
     /// coordinate's vector coordinate, adding any positive offset from
     /// either coordinate
-    ///
-    /// ```rust
+    #[cfg_attr(feature = "std", doc = "```rust")]
+    #[cfg_attr(not(feature = "std"), doc = "```no_run")]
     /// use violin::{heapless::VecD, Coord};
     ///
     /// let mut c1 = Coord::from(VecD::from([2.3, 3.2, 4.1]));
@@ -102,8 +102,8 @@ where
     /// Estimate the distance between this coordinate and the other
     /// coordinate's vector coordinate, _without_ adding any positive offset
     /// from either coordinate. However, height is always included.
-    ///
-    /// ```rust
+    #[cfg_attr(feature = "std", doc = "```rust")]
+    #[cfg_attr(not(feature = "std"), doc = "```no_run")]
     /// use violin::{heapless::VecD, Coord};
     ///
     /// let mut c1 = Coord::from(VecD::from([2.3, 3.2, 4.1]));
@@ -281,7 +281,10 @@ mod tests {
         let c2 = Coord::from(VecD::from([4.5, -6.1, -4.1]));
         assert_eq!(c1.distance_to(&c1), 0.0);
         assert_eq!(c1.distance_to(&c2), c2.distance_to(&c1));
+        #[cfg(feature = "std")]
         assert_eq!(c1.distance_to(&c2), 12.592458060283544);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(c1.distance_to(&c2), 12.59245806);
     }
 
     #[test]
@@ -291,7 +294,10 @@ mod tests {
         let c2 = Coord::from(VecD::from([4.5, -6.1, -4.1]));
         assert_eq!(c1.raw_distance_to(&c1), 0.0);
         assert_eq!(c1.raw_distance_to(&c2), c2.raw_distance_to(&c1));
+        #[cfg(feature = "std")]
         assert_eq!(c1.raw_distance_to(&c2), 12.592458060283544);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(c1.raw_distance_to(&c2), 12.59245806);
     }
 
     #[test]
@@ -302,7 +308,10 @@ mod tests {
         let c2 = Coord::from(VecD::from([4.5, -6.1, -4.1]));
         assert_eq!(c1.raw_distance_to(&c1), 4.0);
         assert_eq!(c1.raw_distance_to(&c2), c2.raw_distance_to(&c1));
+        #[cfg(feature = "std")]
         assert_eq!(c1.raw_distance_to(&c2), 14.592458060283544);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(c1.raw_distance_to(&c2), 14.59245806);
     }
 
     #[test]
@@ -311,7 +320,10 @@ mod tests {
         let mut c2 = Coord::from(VecD::from([4.5, -6.1, -4.1]));
         c1.set_offset(1.2);
         c2.set_offset(10.243);
+        #[cfg(feature = "std")]
         assert_eq!(c1.distance_to(&c2), 24.035458060283545);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(c1.distance_to(&c2), 24.03545806);
     }
 
     #[test]
@@ -320,7 +332,11 @@ mod tests {
         let c2 = Coord::from(VecD::from([3.232, 3.123, -3.4]));
 
         c1.set_offset(-10.34);
-        assert_eq!(c1.distance_to(&c2), 8.408207478410603)
+
+        #[cfg(feature = "std")]
+        assert_eq!(c1.distance_to(&c2), 8.408207478410603);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(c1.distance_to(&c2), 8.40820748);
     }
 
     #[test]
@@ -329,6 +345,9 @@ mod tests {
         let mut c2 = Coord::from(VecD::from([4.5, -6.1, -4.1]));
         c1.set_height(1.2);
         c2.set_height(10.243);
+        #[cfg(feature = "std")]
         assert_eq!(c1.distance_to(&c2), 24.035458060283545);
+        #[cfg(not(feature = "std"))]
+        assert_eq!(c1.distance_to(&c2), 24.03545806);
     }
 }
