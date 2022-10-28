@@ -146,7 +146,22 @@ reason to do so, such as an embedded device that absolutely does not support
 
 A single Vivaldi calculation only requires one square root calculation per
 distance estimate. So pragmatically, it should be rare where such a device is
-_also_ needing to calculate thousands of square root operations per second. 
+_also_ needing to calculate thousands of square root operations per second.
+
+But I still hear you, how much slower you ask? Here is the same table (although
+only `heapless::VecD`), still 1,000,000 updates:
+
+| Abstraction | Memory   | Dimensions | Time |
+| :-: | :-:      | :-:        | :-:  |
+| `Node` | heapless | 8          | 6.4303 s  |
+| `Coord` | heapless | 8          | 6.3707 s |
+| `Node` | heapless | 4          | 6.5513 s |
+| `Coord` | heapless | 4          | 6.4179 s |
+| `Node` | heapless | 2          |  6.5722 s|
+| `Coord` | heapless | 2          |  6.3005 s |
+
+Again, it should be rare for a low power device to need to do
+1,000,000 updates rapidly and not have the ability to use `std`.
 
 ## License
 
