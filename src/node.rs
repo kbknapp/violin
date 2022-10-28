@@ -95,13 +95,13 @@ where
     }
 
     /// Create a new node with an initialized random coordinate
-    #[cfg(feature = "std")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
+    #[cfg(all(feature = "std", feature = "rand"))]
+    #[cfg_attr(docsrs, doc(cfg(all(feature = "std", feature = "rand"))))]
     pub fn rand() -> Self { Self::rand_with_cfg(Config::default()) }
 
     /// Create a new node with an initialized random coordinate
-    #[cfg(feature = "std")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
+    #[cfg(all(feature = "std", feature = "rand"))]
+    #[cfg_attr(docsrs, doc(cfg(all(feature = "std", feature = "rand"))))]
     pub fn rand_with_cfg(cfg: Config) -> Self { Self::with_coord_and_cfg(Coord::rand(), cfg) }
 
     /// Returns the inner coordinate

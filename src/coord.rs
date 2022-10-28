@@ -1,4 +1,4 @@
-#[cfg(feature = "std")]
+#[cfg(all(feature = "std", feature = "rand"))]
 use rand::distributions::Distribution;
 
 #[cfg(feature = "alloc")]
@@ -65,8 +65,8 @@ where
 
     /// Create a new node with an initialized random coordinate vector. This is
     /// useful so that coordinates don't start out overlapping one another.
-    #[cfg(feature = "std")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
+    #[cfg(all(feature = "std", feature = "rand"))]
+    #[cfg_attr(docsrs, doc(cfg(all(feature = "std", feature = "rand"))))]
     pub fn rand() -> Self {
         let mut vec = T::default();
         let mut rng = rand::thread_rng();
