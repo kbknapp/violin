@@ -24,9 +24,8 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: install just
+      - name: Install just
+        run: cargo install just
 
       - name: Spell Check
         run: just spell-check
