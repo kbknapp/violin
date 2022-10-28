@@ -14,9 +14,6 @@ jobs:
           - 1.59.0 # MSRV
 
     steps:
-    - uses: actions/checkout@v2
-
-    steps:
       - uses: actions/checkout@v2
 
       - uses: actions-rs/toolchain@v1
@@ -31,11 +28,11 @@ jobs:
         with:
           command: install just
 
-      - uses: Spell Check
+      - name: Spell Check
         run: just spell-check
 
-      - uses: Lint
+      - name: Lint
         run: just lint
 
-      - uses: Test
+      - name: Test
         run: just test
