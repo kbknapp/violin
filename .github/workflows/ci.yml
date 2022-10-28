@@ -27,12 +27,11 @@ jobs:
       - name: Spell Check
         uses: crate-ci/typos@master
 
+      - name: Install Just
+        run: cargo install just
+
       - name: Lint
-        uses: m3y/rust-just-action@v1
-        with:
-          command: lint
+        run: just lint
 
       - name: Test
-        uses: m3y/rust-just-action@v1
-        with:
-          command: test 'cargo test'
+        run: just test 'cargo test'
