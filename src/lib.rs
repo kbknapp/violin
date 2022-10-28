@@ -337,8 +337,10 @@ where
     ///
     /// let a = VecD::from([1.0, -2.0, 3.0]);
     /// let b = VecD::from([-2., 4., -4.]);
+    /// let c = VecD::from([0., 0., 0.]);
     /// assert_eq!(a.magnitude2(), 14.0);
     /// assert_eq!(b.magnitude2(), 36.0);
+    /// assert_eq!(c.magnitude2(), 0.0);
     /// ```
     fn magnitude2(&self) -> f64;
 }
@@ -377,7 +379,7 @@ fn _sqrt(n: f64) -> f64 {
         }
     }
 
-    ans -= 1.0;
+    ans = f64::max(ans - 1.0, 0.0);
     mid = 0.5;
     loop {
         last = mid;
@@ -430,5 +432,7 @@ mod tests {
         assert_eq!(_sqrt(8.408207478410603), 2.89969093);
         assert_eq!(_sqrt(158.57), 12.59245806);
         assert_eq!(_sqrt(0.0), 0.0);
+        assert_eq!(_sqrt(0.0), 0.0);
+        assert_eq!(_sqrt(0.009983505350056349), 0.0999175);
     }
 }
