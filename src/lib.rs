@@ -5,11 +5,26 @@
 //! [![Documentation][docs-image]][docs-link]
 //! [![Dependency Status][deps-image]][deps-link]
 //!
-//! A Rust `no_std` no `alloc` implementation of the [Vivaldi
-//! algorithm][1](PDF) for a decentralized network coordinate system.
+//! A Rust `no_std` no `alloc` implementation of the [Vivaldi algorithm][1](PDF)
+//! for a network coordinate system.
 //!
 //! A network coordinate system allows nodes to accurately estimate network
 //! latencies by merely exchanging coordinates.
+//!
+//!
+//! <!-- vim-markdown-toc GFM -->
+//!
+//! * [Violin - The Pitch](#violin---the-pitch)
+//! * [Violin - The Anit-Pitch](#violin---the-anit-pitch)
+//! * [Compile from Source](#compile-from-source)
+//! * [Usage](#usage)
+//! * [Benchmarks](#benchmarks)
+//!     * [Notes on `no_std` Performance](#notes-on-no_std-performance)
+//! * [License](#license)
+//!     * [Contribution](#contribution)
+//! * [Related Papers and Research](#related-papers-and-research)
+//!
+//! <!-- vim-markdown-toc -->
 //!
 //! ## Violin - The Pitch
 //!
@@ -47,7 +62,7 @@
 //!
 //! Ensure you have a [Rust toolchain installed][rustup].
 //!
-//! ```text
+//! ```notrust
 //! $ git clone https://github.com/kbknapp/violin
 //! $ cd violin
 //! $ RUSTFLAGS='-Ctarget-cpu=native' cargo build --release
@@ -64,7 +79,7 @@
 //! and updating `a` and `b`'s coordinate from experienced real latency would
 //! look like this:
 //!
-//! ```rust
+//! ```notrust
 //! use std::time::Duration;
 //! use violin::{heapless::VecD, Coord, Node};
 //!
@@ -122,6 +137,24 @@
 //! To run the benchmarks yourself use `RUSTFLAGS='-Ctarget-cpu=native' cargo
 //! bench`.
 //!
+//! ### Notes on `no_std` Performance
+//!
+//! The `no_std` version is _much_ slower because it cannot use platform
+//! intrinsics for square roots, floating point rounding, etc. Instead these
+//! functions had to be hand written.
+//!
+//! Additionally, the `no_std` square root functions round up to 8 decimals of
+//! precision.
+//!
+//! One should realistically only use the `no_std` version when there is a good
+//! reason to do so, such as an embedded device that absolutely does not support
+//! `std`.
+//!
+//! A single Vivaldi calculation only requires one square root calculation per
+//! distance estimate. So pragmatically, it should be rare where such a device
+//! is _also_ needing to calculate thousands of square root operations per
+//! second.
+//!
 //! ## License
 //!
 //! This crate is licensed under either of
@@ -152,7 +185,7 @@
 //!
 //! [//]: # (badges)
 //!
-//! [rustc-image]: https://img.shields.io/badge/rustc-1.53+-blue.svg
+//! [rustc-image]: https://img.shields.io/badge/rustc-1.59+-blue.svg
 //! [crate-image]: https://img.shields.io/crates/v/violin.svg
 //! [crate-link]: https://crates.io/crates/violin
 //! [docs-image]: https://docs.rs/violin/badge.svg
@@ -248,8 +281,8 @@ where
     }
 
     /// Returns distance between `self` and `other`
-    ///
-    /// ```rust
+    #[cfg_attr(feature = "std", doc = "```rust")]
+    #[cfg_attr(not(feature = "std"), doc = "```no_run")]
     /// use violin::{heapless::VecD, Vector};
     ///
     /// let a = VecD::from([1., 0., 5.]);
@@ -281,7 +314,21 @@ where
     /// assert_eq!(a.magnitude(), 3.7416573867739413);
     /// assert_eq!(b.magnitude(), 6.0f64);
     /// ```
+    #[cfg(feature = "std")]
     fn magnitude(&self) -> f64 { self.magnitude2().sqrt() }
+
+    /// Returns the magnitude of the vector `v` (`|v|`) represented by `self`
+    #[cfg_attr(feature = "std", doc = "```rust")]
+    #[cfg_attr(not(feature = "std"), doc = "```no_run")]
+    /// use violin::{heapless::VecD, Vector};
+    ///
+    /// let a = VecD::from([1.0, -2.0, 3.0]);
+    /// let b = VecD::from([-2., 4., -4.]);
+    /// assert_eq!(a.magnitude(), 3.7416573867739413);
+    /// assert_eq!(b.magnitude(), 6.0f64);
+    /// ```
+    #[cfg(not(feature = "std"))]
+    fn magnitude(&self) -> f64 { _sqrt(self.magnitude2()) }
 
     /// Returns the magnitude of the vector `v` (`|v|`) represented by `self`
     /// **without** performing the expensive square root operation
@@ -294,4 +341,94 @@ where
     /// assert_eq!(b.magnitude2(), 36.0);
     /// ```
     fn magnitude2(&self) -> f64;
+}
+
+#[cfg(not(feature = "std"))]
+const PRECISION_INC: f64 = 1.0e-8;
+#[cfg(not(feature = "std"))]
+const PRECISION_POW: f64 = 1.0e+8;
+
+#[cfg(not(feature = "std"))]
+fn _sqrt(n: f64) -> f64 {
+    if n == 0.0 {
+        return 0.0;
+    }
+    let mut ans;
+    let mut last;
+    let mut mid = n / 2.0;
+    let mut top = n;
+    let r_n = _round(n);
+
+    loop {
+        last = mid;
+        let sq = _round(mid * mid);
+        if sq == r_n {
+            ans = mid;
+            break;
+        }
+        if sq > r_n {
+            mid = last / 2.0;
+            top = last;
+        } else {
+            mid += (top - mid) / 2.0;
+        }
+        if mid == last {
+            mid += 1.0;
+        }
+    }
+
+    ans -= 1.0;
+    mid = 0.5;
+    loop {
+        last = mid;
+        let sq = (mid + ans) * (mid + ans);
+        let r_sq = _round(sq);
+        if r_sq == r_n {
+            ans += mid;
+            break;
+        }
+        if sq > n {
+            mid = last / 2.0;
+            top = last;
+        } else {
+            mid += (top - mid) / 2.0;
+        }
+
+        if mid == last {
+            mid += PRECISION_INC;
+        }
+    }
+
+    _round(ans)
+}
+
+#[inline(always)]
+#[cfg(not(feature = "std"))]
+fn _round(n: f64) -> f64 { _ceil((n * PRECISION_POW) - 0.49999999) / PRECISION_POW }
+
+#[inline(always)]
+#[cfg(not(feature = "std"))]
+fn _ceil(n: f64) -> f64 {
+    let n_int = n as u64;
+    if n > n_int as f64 {
+        (n_int + 1) as f64
+    } else {
+        n
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[cfg(not(feature = "std"))]
+    use super::*;
+
+    #[cfg_attr(not(feature = "std"), test)]
+    #[cfg(not(feature = "std"))]
+    fn test_sqrt() {
+        assert_eq!(_sqrt(36.0), 6.0);
+        assert_eq!(_sqrt(27.2934), 5.22430857);
+        assert_eq!(_sqrt(8.408207478410603), 2.89969093);
+        assert_eq!(_sqrt(158.57), 12.59245806);
+        assert_eq!(_sqrt(0.0), 0.0);
+    }
 }
