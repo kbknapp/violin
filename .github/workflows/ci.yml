@@ -11,7 +11,10 @@ jobs:
         rust:
           - stable
           - nightly
-          - 1.46.0 # MSRV
+          - 1.59.0 # MSRV
+
+    steps:
+    - uses: actions/checkout@v2
 
     steps:
       - uses: actions/checkout@v2
@@ -19,16 +22,20 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           pdrofile: minimal
-          toolchain: {{ '${{ matrix.rust }}' }}
+          toolchain: ${{ matrix.rust }}
           override: true
 
-      - name: Install cc
-        run: sudo apt-get update && sudo apt-get install --yes gcc
+      - uses: Swatinem/rust-cache@v1
 
       - uses: actions-rs/cargo@v1
         with:
-          command: build
+          command: install just
 
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
+      - uses: Spell Check
+        run: just spell-check
+
+      - uses: Lint
+        run: just lint
+
+      - uses: Test
+        run: just test
