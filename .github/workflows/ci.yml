@@ -18,13 +18,13 @@ jobs:
 
       - uses: actions-rs/toolchain@v1
         with:
-          pdrofile: minimal
+          profile: minimal
           toolchain: ${{ matrix.rust }}
           override: true
 
       - uses: Swatinem/rust-cache@v1
 
-      - name: Check spelling of file.txt
+      - name: Spell Check
         uses: crate-ci/typos@master
 
       - name: Lint
