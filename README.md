@@ -19,6 +19,7 @@ latencies by merely exchanging coordinates.
 * [Compile from Source](#compile-from-source)
 * [Usage](#usage)
 * [Benchmarks](#benchmarks)
+    * [Notes on `no_std` Performance](#notes-on-no_std-performance)
 * [License](#license)
     * [Contribution](#contribution)
 * [Related Papers and Research](#related-papers-and-research)
@@ -129,6 +130,23 @@ follows:
 | `Coord` | heapless | 2          | 10.916 ms |
 
 To run the benchmarks yourself use `RUSTFLAGS='-Ctarget-cpu=native' cargo bench`.
+
+### Notes on `no_std` Performance
+
+The `no_std` version is _much_ slower because it cannot use platform intrinsics
+for square roots, floating point rounding, etc. Instead these functions had to
+be hand written.
+
+Additionally, the `no_std` square root functions round up to 8 decimals of
+precision.
+
+One should realistically only use the `no_std` version when there is a good
+reason to do so, such as an embedded device that absolutely does not support
+`std`.
+
+A single Vivaldi calculation only requires one square root calculation per
+distance estimate. So pragmatically, it should be rare where such a device is
+_also_ needing to calculate thousands of square root operations per second. 
 
 ## License
 
