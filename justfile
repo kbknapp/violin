@@ -14,12 +14,15 @@ ci: spell-check lint test
 fmt:
     cargo fmt --all
 
+# Check the formatting of the code but don't actually format it
+fmt-check:
+    cargo fmt --all --check
+
 # Lint the code
 lint:
     cargo clippy --all-targets -- -Dwarnings
     cargo clippy --all-targets --no-default-features -- -Dwarnings
     cargo clippy --all-targets --all-features -- -Dwarnings
-    cargo fmt --check
 
 # Run benchmarks
 bench $RUSTFLAGS='-Ctarget-cpu=native':

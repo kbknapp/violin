@@ -12,6 +12,9 @@ jobs:
           - stable
           - nightly
           - 1.59.0 # MSRV
+        include:
+          - rust: nightly
+            fmt: true
 
     steps:
       - uses: actions/checkout@v2
@@ -29,6 +32,10 @@ jobs:
 
       - name: Install Just
         run: cargo install just
+
+      - name: Check Formatting
+        if: ${{ matrix.fmt }}
+        run: just fmt-check
 
       - name: Lint
         run: just lint
