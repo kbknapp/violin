@@ -64,6 +64,11 @@ fn do_coord_updates<T: Vector + Clone>(
 
 pub fn benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("violin::Node");
+    #[cfg(not(feature = "std"))]
+    {
+        // no_std is very slow
+        group.sample_size(10);
+    }
     group.throughput(Throughput::Elements(SAMPLES * NODES));
     group.bench_function("heapless 8D (0 adjustment window)", |b| {
         // Create Coords
@@ -89,6 +94,11 @@ pub fn benchmarks(c: &mut Criterion) {
     group.finish();
 
     let mut group = c.benchmark_group("violin::Coord");
+    #[cfg(not(feature = "std"))]
+    {
+        // no_std is very slow
+        group.sample_size(10);
+    }
     group.throughput(Throughput::Elements(SAMPLES * NODES));
     group.bench_function("heapless 8D", |b| {
         // Create Coords
