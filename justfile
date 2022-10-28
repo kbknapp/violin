@@ -26,10 +26,10 @@ bench $RUSTFLAGS='-Ctarget-cpu=native':
     cargo bench
 
 # Run the test suite
-test: (_cargo-install 'cargo-nextest')
-    cargo nextest run
-    cargo nextest run --no-default-features
-    cargo nextest run --all-features
+test TEST_RUNNER='cargo nextest run':
+    {{ TEST_RUNNER }}
+    {{ TEST_RUNNER }} --no-default-features
+    {{ TEST_RUNNER }} --all-features
 
 # Check for typos
 spell-check: (_cargo-install 'typos-cli')

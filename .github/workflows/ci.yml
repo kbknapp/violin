@@ -24,14 +24,15 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
-      - name: Install just
-        run: cargo install just
-
-      - name: Spell Check
-        run: just spell-check
+      - name: Check spelling of file.txt
+        uses: crate-ci/typos@master
 
       - name: Lint
-        run: just lint
+        uses: m3y/rust-just-action@v1
+        with:
+          command: lint
 
       - name: Test
-        run: just test
+        uses: m3y/rust-just-action@v1
+        with:
+          command: test 'cargo test'
