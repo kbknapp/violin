@@ -1,6 +1,6 @@
 [package]
 name = "violin"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "decentralized network coordinate system using the vivaldi algorithm"
 documentation = "https://docs.rs/violin/"
