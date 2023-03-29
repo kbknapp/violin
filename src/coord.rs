@@ -250,6 +250,86 @@ where
         }
     }
 
+    /// Continue to update the node's coordinate based off all the RTTs (in
+    /// seconds) of the `other` coordinates until the estimated distance is
+    /// within the given RTT +/- the threshold.
+    ///
+    /// > **WARNING**
+    /// >
+    /// > If any of `other` has low confidence (high error estimate) this can do
+    /// > many updates
+    #[cfg(all(feature = "std", feature = "alloc"))]
+    pub fn try_update_until_all<'a>(
+        &mut self,
+        mut others: impl Iterator<Item = (f64, &'a Coord<T>)>,
+        threshold: f64,
+        cfg: &Config,
+    ) -> Result<()>
+    where
+        T: 'a,
+    {
+        if !(self.error_estimate > 0.0 && others.all(|o| o.0 > 0.0 || o.1.error_estimate > 0.0)) {
+            return Err(Error {
+                kind: ErrorKind::InvalidCoordinate,
+            });
+        }
+
+        self.update_until_all(others, threshold, cfg);
+
+        Ok(())
+    }
+
+    /// Continue to update the node's coordinate based off all the RTTs (in
+    /// seconds) of the `other` coordinates until the estimated distance is
+    /// within the given RTT +/- the threshold.
+    ///
+    /// > **WARNING**
+    /// >
+    /// > If any of `other` has low confidence (high error estimate) this can do
+    /// > many updates
+    ///
+    /// # Panics
+    ///
+    /// Panics if any:
+    ///
+    /// - `rtt <= 0.0`
+    /// - This coordinate's OR the other's error estimate `<= 0.0`
+    #[cfg(all(feature = "std", feature = "alloc"))]
+    pub fn update_until_all<'a>(
+        &mut self,
+        others: impl Iterator<Item = (f64, &'a Coord<T>)>,
+        threshold: f64,
+        cfg: &Config,
+    ) where
+        T: 'a,
+    {
+        struct Point<'a, T> {
+            rtt: f64,
+            high: f64,
+            low: f64,
+            coord: &'a Coord<T>,
+        }
+        // TODO: dont go negative
+        let points: Vec<_> = others
+            .map(|(rtt, coord)| Point {
+                rtt,
+                high: rtt + threshold,
+                low: rtt - threshold,
+                coord,
+            })
+            .collect();
+        loop {
+            if points
+                .iter()
+                .map(|p| (p, self.distance_to(p.coord)))
+                .all(|(p, est)| est >= p.low && est <= p.high)
+            {
+                break;
+            }
+            points.iter().for_each(|p| self.update(p.rtt, p.coord, cfg));
+        }
+    }
+
     /// Update the node's coordinate based off the RTT (in seconds) of the
     /// `other` coordinate.
     ///

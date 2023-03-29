@@ -217,6 +217,54 @@ where
         );
     }
 
+    /// Continue to update the node's coordinate based off all the RTTs (in
+    /// seconds) of the `other` coordinates until the estimated distance is
+    /// within the given RTT +/- the threshold.
+    ///
+    /// > **WARNING**
+    /// >
+    /// > If any of `other` has low confidence (high error estimate) this can do
+    /// > many updates
+    ///
+    /// Panics if any:
+    ///
+    /// - `rtt <= 0.0`
+    /// - This coordinate's AND the other's error estimate `<= 0.0`
+    #[cfg(all(feature = "std", feature = "alloc"))]
+    pub fn update_until_all(&mut self, others: &[(Duration, &Coord<V>)], threshold: f64) {
+        self.coord.update_until_all(
+            others
+                .iter()
+                .map(|(rtt, coord)| (f64::max(f64::MIN_POSITIVE, rtt.as_secs_f64()), *coord)),
+            threshold,
+            &self.cfg,
+        );
+    }
+
+    /// Continue to update the node's coordinate based off all the RTTs (in
+    /// seconds) of the `other` coordinates until the estimated distance is
+    /// within the given RTT +/- the threshold.
+    ///
+    /// > **WARNING**
+    /// >
+    /// > If any of `other` has low confidence (high error estimate) this can do
+    /// > many updates
+    #[cfg(all(feature = "std", feature = "alloc"))]
+    pub fn try_update_until_all(
+        &mut self,
+        others: &[(Duration, &Coord<V>)],
+        threshold: f64,
+    ) -> Result<()> {
+        self.coord.try_update_until_all(
+            others
+                .iter()
+                .map(|(rtt, coord)| (f64::max(f64::MIN_POSITIVE, rtt.as_secs_f64()), *coord)),
+            threshold,
+            &self.cfg,
+        )?;
+        Ok(())
+    }
+
     /// Update the node's coordinate based off the RTT of the
     /// `other` coordinate.
     ///
