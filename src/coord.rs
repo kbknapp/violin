@@ -3,7 +3,10 @@ use rand::distributions::Distribution;
 
 #[cfg(feature = "alloc")]
 use crate::VecD;
-use crate::{heapless, Config, Vector, OVERLAP_THRESHOLD};
+use crate::{
+    error::{Error, ErrorKind, Result},
+    heapless, Config, Vector, OVERLAP_THRESHOLD,
+};
 
 /// A network coordinate consisting of a dimensional vector, and some metadata
 #[derive(Debug)]
@@ -126,6 +129,29 @@ where
 
     /// Set the raw height
     pub fn set_height(&mut self, height: f64) { self.height = height; }
+
+    /// Set the raw error estimate.
+    ///
+    /// # Panics
+    ///
+    /// If `err_est <= 0.0`
+    pub fn set_error_estimate(&mut self, err_est: f64) {
+        assert!(self.try_set_error_estimate(err_est).is_ok());
+    }
+
+    /// Set the raw error estimate.
+    pub fn try_set_error_estimate(&mut self, err_est: f64) -> Result<()> {
+        if !err_est.is_normal() {
+            return Err(Error {
+                kind: ErrorKind::InvalidCoordinate,
+            });
+        }
+        self.error_estimate = err_est;
+        Ok(())
+    }
+
+    /// Returns the raw error estimate.
+    pub fn error_estimate(&self) -> f64 { self.error_estimate }
 
     /// Returns the raw offset
     pub fn offset(&self) -> f64 { self.offset }

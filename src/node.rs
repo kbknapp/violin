@@ -125,6 +125,21 @@ where
         Duration::from_secs_f64(self.coord.distance_to(other))
     }
 
+    /// Returns the raw error estimate.
+    pub fn error_estimate(&self) -> f64 { self.coord.error_estimate() }
+
+    /// Set the raw error estimate.
+    ///
+    /// # Panics
+    ///
+    /// If `err_est <= 0.0`
+    pub fn set_error_estimate(&mut self, err_est: f64) { self.coord.set_error_estimate(err_est); }
+
+    /// Set the raw error estimate.
+    pub fn try_set_error_estimate(&mut self, err_est: f64) -> Result<()> {
+        self.coord.try_set_error_estimate(err_est)
+    }
+
     /// Update the node's coordinate based off the RTT of the
     /// `other` coordinate.
     ///
