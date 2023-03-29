@@ -236,7 +236,7 @@ where
     /// Panics if any:
     ///
     /// - `rtt <= 0.0`
-    /// - This coordinate's AND the other's error estimate `<= 0.0`
+    /// - This coordinate's OR the other's error estimate `<= 0.0`
     pub fn update_until(&mut self, rtt: f64, other: &Coord<T>, threshold: f64, cfg: &Config) {
         // TODO: dont go negative
         let low = rtt - threshold;
@@ -263,11 +263,9 @@ where
     /// Panics if any:
     ///
     /// - `rtt <= 0.0`
-    /// - This coordinate's AND the other's error estimate `<= 0.0`
+    /// - This coordinate's OR the other's error estimate `<= 0.0`
     pub fn update(&mut self, rtt: f64, other: &Coord<T>, cfg: &Config) {
-        // @TODO assert or Err()?
-        assert!(self.error_estimate > 0.0 || other.error_estimate > 0.0);
-        assert!(rtt > 0.0);
+        assert!(self.error_estimate > 0.0 && other.error_estimate > 0.0 && rtt > 0.0);
 
         // Sample weight balances local and other error
         //  - A high local error = greater movement

@@ -207,7 +207,7 @@ where
     /// Panics if any:
     ///
     /// - `rtt <= 0.0`
-    /// - This coordinate's AND the other's error estimate `<= 0.0`
+    /// - This coordinate's OR the other's error estimate `<= 0.0`
     pub fn update_until(&mut self, rtt: Duration, other: &Coord<V>, threshold: f64) {
         self.coord.update_until(
             f64::max(f64::MIN_POSITIVE, rtt.as_secs_f64()),
@@ -274,7 +274,7 @@ where
     ///
     /// Panics if any:
     ///
-    /// - This coordinate's AND the remote's error estimate `<= 0.0`
+    /// - This coordinate's OR the remote's error estimate `<= 0.0`
     pub fn update(&mut self, rtt: Duration, other: &Coord<V>) -> bool {
         let coord = self.coord.clone();
         if let Err(Error {
