@@ -140,6 +140,83 @@ where
         self.coord.try_set_error_estimate(err_est)
     }
 
+    /// Continue to update the node's coordinate based off the RTT (in seconds)
+    /// of the `other` coordinate until the estimated distance is within the
+    /// given RTT +/- the threshold.
+    ///
+    /// > **WARNING**
+    /// >
+    /// > If `other` has low confidence (high error estimate) this can do many
+    /// > updates
+    ///
+    /// > **WARNING 2**
+    /// >
+    /// > Making this coordinate accurate for a single other node does not
+    /// > necessarily mean the coordinates are accurate. It takes a minimum of
+    /// > three nodes to be certain of a more accurate coordinate. However,
+    /// > simply updating for three other nodes in series (one after the other)
+    /// > will not help as this node's coordinates will just shift around the
+    /// > coordinate space. Instead one should perform the updates together.
+    /// >
+    /// > For example, for three nodes `A`, `B`, and `C` imagining it took three
+    /// > updates on each to become accurate (three updates is just an arbitrary
+    /// > number, in the real world it could be many, many more) instead of
+    /// > updating `AAABBBCCC` the updates should be performed `ABCABCABC`,
+    /// > which is what [`Node::update_until_all`] does.
+    pub fn try_update_until(
+        &mut self,
+        rtt: Duration,
+        other: &Coord<V>,
+        threshold: f64,
+    ) -> Result<()> {
+        self.coord.try_update_until(
+            f64::max(f64::MIN_POSITIVE, rtt.as_secs_f64()),
+            other,
+            threshold,
+            &self.cfg,
+        )?;
+        Ok(())
+    }
+
+    /// Continue to update the node's coordinate based off the RTT (in seconds)
+    /// of the `other` coordinate until the estimated distance is within the
+    /// given RTT +/- the threshold.
+    ///
+    /// > **WARNING**
+    /// >
+    /// > If `other` has low confidence (high error estimate) this can do many
+    /// > updates
+    ///
+    /// > **WARNING 2**
+    /// >
+    /// > Making this coordinate accurate for a single other node does not
+    /// > necessarily mean the coordinates are accurate. It takes a minimum of
+    /// > three nodes to be certain of a more accurate coordinate. However,
+    /// > simply updating for three other nodes in series (one after the other)
+    /// > will not help as this node's coordinates will just shift around the
+    /// > coordinate space. Instead one should perform the updates together.
+    /// >
+    /// > For example, for three nodes `A`, `B`, and `C` imagining it took three
+    /// > updates on each to become accurate (three updates is just an arbitrary
+    /// > number, in the real world it could be many, many more) instead of
+    /// > updating `AAABBBCCC` the updates should be performed `ABCABCABC`,
+    /// > which is what [`Node::update_until_all`] does.
+    ///
+    /// # Panics
+    ///
+    /// Panics if any:
+    ///
+    /// - `rtt <= 0.0`
+    /// - This coordinate's AND the other's error estimate `<= 0.0`
+    pub fn update_until(&mut self, rtt: Duration, other: &Coord<V>, threshold: f64) {
+        self.coord.update_until(
+            f64::max(f64::MIN_POSITIVE, rtt.as_secs_f64()),
+            other,
+            threshold,
+            &self.cfg,
+        );
+    }
+
     /// Update the node's coordinate based off the RTT of the
     /// `other` coordinate.
     ///
