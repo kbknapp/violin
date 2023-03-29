@@ -337,6 +337,25 @@ where
     /// coordinate's movement (i.e. it will move less because the `other` is
     /// asserting that it is less confident in the accuracy
     /// of it's coordinate position.)
+    pub fn try_update(&mut self, rtt: f64, other: &Coord<T>, cfg: &Config) -> Result<()> {
+        if !(self.error_estimate > 0.0 && other.error_estimate > 0.0 && rtt > 0.0) {
+            return Err(Error {
+                kind: ErrorKind::InvalidCoordinate,
+            });
+        }
+
+        self.update(rtt, other, cfg);
+
+        Ok(())
+    }
+
+    /// Update the node's coordinate based off the RTT (in seconds) of the
+    /// `other` coordinate.
+    ///
+    /// A high `other` error estimate will reduce the "force" applied to this
+    /// coordinate's movement (i.e. it will move less because the `other` is
+    /// asserting that it is less confident in the accuracy
+    /// of it's coordinate position.)
     ///
     /// # Panics
     ///
