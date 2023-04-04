@@ -15,7 +15,7 @@ latencies by merely exchanging coordinates.
 <!-- vim-markdown-toc GFM -->
 
 * [Violin - The Pitch](#violin---the-pitch)
-* [Violin - The Anit-Pitch](#violin---the-anit-pitch)
+* [Violin - The Anti-Pitch](#violin---the-anti-pitch)
 * [Compile from Source](#compile-from-source)
 * [Usage](#usage)
 * [Benchmarks](#benchmarks)
@@ -43,7 +43,7 @@ measures against node `Origin`, node `B` does the same. Then `A` can be given
 the coordinates to `B` and accurately estimate the latency without ever having
 measured `B` directly.
 
-## Violin - The Anit-Pitch
+## Violin - The Anti-Pitch
 
 Vivaldi isn't a magic bullet and still requires measuring real latencies to
 adjust the coordinates. In a naive implementation, conducting a latency check
