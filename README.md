@@ -11,11 +11,10 @@ for a network coordinate system.
 A network coordinate system allows nodes to accurately estimate network
 latencies by merely exchanging coordinates.
 
-
 <!-- vim-markdown-toc GFM -->
 
 * [Violin - The Pitch](#violin---the-pitch)
-* [Violin - The Anit-Pitch](#violin---the-anit-pitch)
+* [Violin - The Anti-Pitch](#violin---the-anti-pitch)
 * [Compile from Source](#compile-from-source)
 * [Usage](#usage)
 * [Benchmarks](#benchmarks)
@@ -43,7 +42,7 @@ measures against node `Origin`, node `B` does the same. Then `A` can be given
 the coordinates to `B` and accurately estimate the latency without ever having
 measured `B` directly.
 
-## Violin - The Anit-Pitch
+## Violin - The Anti-Pitch
 
 Vivaldi isn't a magic bullet and still requires measuring real latencies to
 adjust the coordinates. In a naive implementation, conducting a latency check
@@ -52,19 +51,17 @@ latency check directly as the answer. However, this is not how it's supposed to
 be used.
 
 Transferring a Violin coordinate in practice can be comparable data to a small
-set of ICMP messages. For example an 8-Dimension coordinate (plus three 
+set of ICMP messages. For example an 8-Dimension coordinate (plus three
 additional `f64`s of metadata) is 88 bytes. However, unlike ICMP messages, the
 Violin coordinates are a single transmission and only need to be re-transmitted
 on significant change. Work could even be done to only transmit deltas as well.
 
 ## Compile from Source
 
-Ensure you have a [Rust toolchain installed][rustup].
+Ensure you have a [Rust toolchain installed][rustup], and have cloned the repository locally.
 
-```
-$ git clone https://github.com/kbknapp/violin
-$ cd violin
-$ RUSTFLAGS='-Ctarget-cpu=native' cargo build --release
+```sh
+RUSTFLAGS='-Ctarget-cpu=native' cargo build --release
 ```
 
 **NOTE:** The `RUSTFLAGS` can be omitted. However, if on a recent CPU that
@@ -103,7 +100,7 @@ println!("a's estimate to b: {:.2}ms", a.distance_to(&b.coordinate()).as_millis(
 ## Benchmarks
 
 A set of benchmarks are included using 8D, 4D, and 2D coordinates both using
-`heap::VecD` (requires the `alloc` feature) and `heapless::VecD`. 
+`heap::VecD` (requires the `alloc` feature) and `heapless::VecD`.
 
 The benchmarks measure both the higher level `Node` as well as a lower level
 `Coord` abstractions.
@@ -167,8 +164,8 @@ Again, it should be rare for a low power device to need to do
 
 This crate is licensed under either of
 
- * [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
- * [MIT license](http://opensource.org/licenses/MIT)
+* [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+* [MIT license](http://opensource.org/licenses/MIT)
 
 at your option.
 
@@ -180,12 +177,12 @@ dual licensed as above, without any additional terms or conditions.
 
 ## Related Papers and Research
 
-- [Vivaldi - A Decentralized Network Coordinate System][1](PDF)
-- [Network Coordinates in the Wild][2](PDF)
-- [Towards Network Triangle Inequality Violation Aware Distributed Systems][3](PDF)
-- [On Suitability of Euclidean Embedding for Host-based Network Coordinate Systems][4](PDF)
-- [Practical, Distributed Network Coordinates][5](PDF)
-- [Armon Dadgar on Vivaldi: Decentralized Network Coordinate System][6](Video)
+* [Vivaldi - A Decentralized Network Coordinate System][1](PDF)
+* [Network Coordinates in the Wild][2](PDF)
+* [Towards Network Triangle Inequality Violation Aware Distributed Systems][3](PDF)
+* [On Suitability of Euclidean Embedding for Host-based Network Coordinate Systems][4](PDF)
+* [Practical, Distributed Network Coordinates][5](PDF)
+* [Armon Dadgar on Vivaldi: Decentralized Network Coordinate System][6](Video)
 
 [//]: # (badges)
 

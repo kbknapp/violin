@@ -15,7 +15,7 @@
 //! <!-- vim-markdown-toc GFM -->
 //!
 //! * [Violin - The Pitch](#violin---the-pitch)
-//! * [Violin - The Anit-Pitch](#violin---the-anit-pitch)
+//! * [Violin - The Anti-Pitch](#violin---the-anti-pitch)
 //! * [Compile from Source](#compile-from-source)
 //! * [Usage](#usage)
 //! * [Benchmarks](#benchmarks)
@@ -43,7 +43,7 @@
 //! given the coordinates to `B` and accurately estimate the latency without
 //! ever having measured `B` directly.
 //!
-//! ## Violin - The Anit-Pitch
+//! ## Violin - The Anti-Pitch
 //!
 //! Vivaldi isn't a magic bullet and still requires measuring real latencies to
 //! adjust the coordinates. In a naive implementation, conducting a latency
@@ -268,7 +268,7 @@ where
     const LEN: usize;
 
     /// Returns a unit vector (`â`) from `other` pointing at `self` along
-    /// with the magnitude of the difference beand tween both vectors
+    /// with the magnitude of the difference between both vectors
     fn unit_vector_from(&self, other: &Self) -> (f64, Self) {
         let diff = self.difference(other);
         let mag = diff.magnitude();
