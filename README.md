@@ -171,7 +171,7 @@ at your option.
 
 ### Contribution
 
-Unless you explicitly Node otherwise, any contribution intentionally submitted
+Unless you explicitly note otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
 dual licensed as above, without any additional terms or conditions.
 
